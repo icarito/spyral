@@ -32,7 +32,6 @@ class View(object):
         self._scene = _wref(parent.scene)
         self._scene()._add_view(self)
         self._parent()._add_child(self)
-        self._scene()._apply_style(self)
 
     def _add_child(self, entity):
         """
@@ -468,27 +467,6 @@ class View(object):
         c = spyral.util._CollisionBox(pos, area)
         warped_box = self._parent()._warp_collision_box(c)
         self._scene()._set_collision_box(self, warped_box.rect)
-
-    def __stylize__(self, properties):
-        """
-        Applies the *properties* to this scene. This is called when a style
-        is applied.
-
-        :param properties: a mapping of property names (strings) to values.
-        :type properties: ``dict``
-        """
-        simple = ['pos', 'x', 'y', 'position',
-                  'width', 'height', 'size',
-                  'output_width', 'output_height', 'output_size',
-                  'anchor', 'layer', 'layers', 'visible',
-                  'scale', 'scale_x', 'scale_y',
-                  'crop', 'crop_width', 'crop_height', 'crop_size']
-        for property in simple:
-            if property in properties:
-                value = properties.pop(property)
-                setattr(self, property, value)
-        if len(properties) > 0:
-            spyral.exceptions.unused_style_warning(self, properties.iterkeys())
 
     def collide_sprite(self, other):
         """

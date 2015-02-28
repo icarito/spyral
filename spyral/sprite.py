@@ -26,28 +26,6 @@ class Sprite(object):
     :type parent: :class:`View <spyral.View>` or :class:`Scene <spyral.Scene>`
     """
 
-    def __stylize__(self, properties):
-        """
-        The __stylize__ function is called during initialization to set up
-        properties taken from a style function. Sprites that want to override
-        default styling behavior should implement this class, although that
-        should rarely be necessary.
-        """
-        if 'image' in properties:
-            image = properties.pop('image')
-            if isinstance(image, str):
-                image = spyral.Image(image)
-            setattr(self, 'image', image)
-        simple = ['pos', 'x', 'y', 'position', 'anchor', 'layer', 'visible',
-                  'scale', 'scale_x', 'scale_y', 'flip_x', 'flip_y', 'angle',
-                  'mask']
-        for property in simple:
-            if property in properties:
-                value = properties.pop(property)
-                setattr(self, property, value)
-        if len(properties) > 0:
-            spyral.exceptions.unused_style_warning(self, properties.iterkeys())
-
     def __init__(self, parent):
         _all_sprites.append(_wref(self))
         self._age = 0
@@ -79,7 +57,6 @@ class Sprite(object):
         parent._add_child(self)
 
         self._scene()._register_sprite(self)
-        self._scene()._apply_style(self)
         spyral.event.register('director.render', self._draw,
                               scene=self._scene())
 

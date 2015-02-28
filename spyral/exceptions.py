@@ -25,9 +25,5 @@ class ActorsNotAvailableWarning(Warning):
 
 
 # Convenience Wrappers
-def unused_style_warning(obj, properties):
-    warnings.warn("%r does not understand style properties %s" %
-                  (obj, ','.join(properties)),
-                  UnusedStyleWarning)
 def actors_not_available_warning():
     warnings.warn("You do not have Greenlets installed, so you cannot use Actors.", ActorsNotAvailableWarning)

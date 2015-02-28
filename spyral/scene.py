@@ -63,13 +63,6 @@ class Scene(object):
         self._pending = []
         self._greenlets = {} # Maybe need to weakref dict
 
-        self._style_symbols = {}
-        self._style_classes = []
-        self._style_properties = defaultdict(lambda: {})
-        self._style_functions = {}
-
-        self._style_functions['_get_spyral_path'] = spyral._get_spyral_path
-
         self._size = None
         self._scale = spyral.Vec2D(1.0, 1.0) #None
         self._surface = pygame.display.get_surface()
@@ -111,10 +104,6 @@ class Scene(object):
         # View interface
         self._scene = _wref(self)
         self._views = []
-
-        # Loading default styles
-        self.load_style(spyral._get_spyral_path() +
-                        'resources/form_defaults.spys')
 
     # Actor Handling
     def _register_actor(self, actor, greenlet):
@@ -338,91 +327,6 @@ class Scene(object):
         self._event_source = source
 
 
-    # Style Handling
-    def __stylize__(self, properties):
-        """
-        Applies the *properties* to this scene. This is called when a style
-        is applied.
-
-        :param properties: a mapping of property names (strings) to values.
-        :type properties: dict
-        """
-        if 'size' in properties:
-            size = properties.pop('size')
-            self._set_size(size)
-        if 'background' in properties:
-            background = properties.pop('background')
-            if isinstance(background, (tuple, list)):
-                bg = spyral.Image(size=self.size)
-                bg.fill(background)
-            else:
-                bg = spyral.Image(background)
-            self._set_background(bg)
-        if 'layers' in properties:
-            layers = properties.pop('layers')
-            self._set_layers(layers)
-        if len(properties) > 0:
-            spyral.exceptions.unused_style_warning(self, properties.iterkeys())
-
-    def load_style(self, path):
-        """
-        Loads the style file in *path* and applies it to this Scene and any
-        Sprites and Views that it contains. Most properties are stylable.
-
-        :param path: The location of the style file to load. Should have the
-                     extension ".spys".
-        :type path: str
-        """
-        spyral._style.parse(open(path, "r").read(), self)
-        self._apply_style(self)
-
-    def _apply_style(self, obj):
-        """
-        Applies any loaded styles from this scene to the object.
-
-        :param object obj: Any object
-        """
-        if not hasattr(obj, "__stylize__"):
-            raise spyral.NotStylableError(("%r is not an object"
-                                           "which can be styled.") % obj)
-        properties = {}
-        for cls in reversed(obj.__class__.__mro__[:-1]):
-            name = cls.__name__
-            if name not in self._style_properties:
-                continue
-            properties.update(self._style_properties[name])
-        if hasattr(obj, "__style__"):
-            name = getattr(obj, "__style__")
-            if name in self._style_properties:
-                properties.update(self._style_properties[name])
-        if properties != {}:
-            obj.__stylize__(properties)
-
-    def add_style_function(self, name, function):
-        """
-        Adds a new function that will then be available to be used in a
-        stylesheet file.
-
-        Example::
-
-            import random
-            class MyScene(spyral.Scene):
-                def __init__(self):
-                    ...
-                    self.load_style("my_style.spys")
-                    self.add_style_function("randint", random.randint)
-                    # inside of style file you can now use the randint function!
-                    ...
-
-
-        :param name: The name the function will go by in the style file.
-        :type name: string
-        :param function: The actual function to add to the style file.
-        :type function: function
-        """
-        self._style_functions[name] = function
-
-
     # Rendering
     def _get_size(self):
         """
@@ -433,8 +337,7 @@ class Scene(object):
         """
         if self._size is None:
             raise spyral.SceneHasNoSizeException("You should specify a size in "
-                                                 "the constructor or in a "
-                                                 "style file before other "
+                                                 "the constructor before other "
                                                  "operations.")
         return self._size
 

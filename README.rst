@@ -17,7 +17,6 @@ What does Spyral offer?
 * **Event handling** : A sophisticated event delegator let's you register symbolic event names with functions, greatly enhancing the clarity of your code.
 * **Forms and Widgets** : Need a button? Text input? Sophisticated tabbing? All our batteries are included!
 * **Concurrency (Actors)** : Simple but incredibly powerful parallelism with a single MixIn - give each object it's own ``main`` function!
-* **Styling** : Separate out content from your code with Styling.
 * **Pythonic interface** : We tried to make things fun and easy for you, the developer.
 * Plus other goodies like **Collision Handling**, **Layering**, **Game Clocks**, and more!
 
@@ -35,7 +34,6 @@ Examples
 * `events.py <https://github.com/platipy/spyral/blob/master/examples/events.py>`_ : Demonstration of registering keyboard and mouse events.
 * `fonts.py <https://github.com/platipy/spyral/blob/master/examples/fonts.py>`_ : Demonstration of a couple properties of fonts, and how to get text on the screen.
 * `forms.py <https://github.com/platipy/spyral/blob/master/examples/forms.py>`_ : Demonstration of the Forms feature, including buttons and text inputs.
-* `style.py <https://github.com/platipy/spyral/blob/master/examples/style.py>`_ : Demonstration of using Style files to separate code from content.
 * `concurrent.py <https://github.com/platipy/spyral/blob/master/examples/concurrent.py>`_ : Demonstration of the excellent Actors mixin, which allows quick and easy concurrency (requires greenlets). Press any key to step through it.
 * `cursors.py <https://github.com/platipy/spyral/blob/master/examples/cursors.py>`_ : Demosntration of the cursors presently supported in Spyral through Pygame. Press the left mouse button to step through them.
 * `collisions.py <https://github.com/platipy/spyral/blob/master/examples/collisions.py>`_ : Demonstration of two objects bouncing off each other.

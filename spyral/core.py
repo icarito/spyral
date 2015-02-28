@@ -17,7 +17,6 @@ def _init():
         return
     _inited = True
     spyral.event._init()
-    spyral._style.init()
     pygame.display.init()
     pygame.font.init()
 
